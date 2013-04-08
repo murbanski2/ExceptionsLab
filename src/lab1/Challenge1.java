@@ -50,7 +50,7 @@ public class Challenge1 {
         return nameParts[LAST_NAME_IDX];
         }
     
-    private static void validateStringInput(String fName) {
+    private static void validateStringInput(String fName) throws IllegalArgumentException{
     
         if (fName == null || fName.length() == 0) {
             throw new IllegalArgumentException("Name must not be null or " +

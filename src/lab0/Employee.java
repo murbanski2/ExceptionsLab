@@ -63,6 +63,9 @@ public class Employee {
     }
 
     public void setHireDate(Date hireDate) {
+        if(hireDate == null) {
+            throw new IllegalArgumentException("hireDate cannot be null");
+        }
         this.hireDate = hireDate;
     }
 
@@ -79,8 +82,25 @@ public class Employee {
     }
 
     public void setSsn(String ssn) {
+        validateSsn(ssn);
         this.ssn = ssn;
     }
     
+    private void validateStringInput(String theString, String stringName) 
+            throws IllegalArgumentException{
+        if (theString == null || theString.length() == 0) {
+            throw new IllegalArgumentException(stringName + " must not be null or " +
+                    "blank.");
+        }
+    }
     
+    private void validateSsn(String ssn) throws IllegalArgumentException {
+        validateStringInput(ssn, "ssn");
+        if (ssn.matches("[0-9]{3}\\-[0-9]{2}\\-[0-9]{4}")) {
+            //ssn is correct format
+        }
+        else {
+            throw new IllegalArgumentException("ssn format does not match template.");
+        }
+    }
 }
