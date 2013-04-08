@@ -18,17 +18,49 @@ public class Challenge1 {
     private static final int LAST_NAME_IDX = 1;
 
     public static void main(String[] args) {
-        Challenge1 app = new Challenge1();
-        
-        String fullName = JOptionPane.showInputDialog("Enter full name:");
-        String lastName = app.extractLastName(fullName);
-        String msg = "Your last name is: " + lastName;
-        JOptionPane.showMessageDialog(null, msg);
+        boolean keepGoing = true;
+        while (keepGoing) {
+            try {
+                Challenge1 app = new Challenge1();
+
+                String fullName = JOptionPane.showInputDialog("Enter full name:");
+                validateStringInput(fullName);
+                String lastName = app.extractLastName(fullName);
+                String msg = "Your last name is: " + lastName;
+                JOptionPane.showMessageDialog(null, msg);
+                keepGoing = false;
+            }
+            catch (IllegalArgumentException iae) {
+                JOptionPane.showMessageDialog(null, iae.getMessage() );
+            }
+            finally {
+            
+            } 
+        }
     }
     
-    public String extractLastName(String fullName) {
+    public String extractLastName(String fullName) throws IllegalArgumentException{
         String[] nameParts = fullName.split(" ");
+        
+        if (nameParts.length < 2) {
+            throw new IllegalArgumentException(
+                    "Name must have at least two parts separated by a space." + 
+                    "  Please enter a name with at least two parts.");
+        }
         return nameParts[LAST_NAME_IDX];
+        }
+    
+    private static void validateStringInput(String fName) {
+    
+        if (fName == null || fName.length() == 0) {
+            throw new IllegalArgumentException("Name must not be null or " +
+                    "blank.  Please enter a name.");
+        }
     }
-
 }
+    
+ 
+
+
+    
+
