@@ -25,6 +25,21 @@ public class Employee {
     private String ssn;
     private Date hireDate;
     private int daysVacation;
+    public static final String VACATION_DAYS_OVER_MAXIMUM_ERROR 
+            = "Vacation days can not be more than " + MAX_VACATION_DAYS;
+    public static final String VACATION_DAYS_ARE_NEGATIVE_ERROR
+            = "daysVacation must not be negative";
+        public static final String HIREDATE_NULL_OR_BLANK_ERROR
+            = "hireDate must not be null or blank";
+    public static final String HIREDATE_IN_FUTURE_ERROR
+            = "hireDate must not be in the future";
+    public static final String LAST_NAME_NULL_OR_BLANK_ERROR
+            = "lastName must not be null or blank";
+    public static final String SSN_NULL_OR_BLANK_ERROR
+            = "SSN must not be null or blank";
+    public static final String SSN_FORMAT_ERROR
+            = "SSN must be in the form 123-45-6677";
+    
 
     public Employee() {
         firstName = "Unknown";
@@ -34,12 +49,19 @@ public class Employee {
         daysVacation = 0;
     }
 
-    public Employee(String firstName, String lastName, String ssn, Date hireDate, int daysVacation) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.ssn = ssn;
-        this.hireDate = hireDate;
-        this.daysVacation = daysVacation;
+    public Employee(String firstName, String lastName, String ssn,
+            Date hireDate, int daysVacation) throws IllegalArgumentException
+    {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.ssn = ssn;
+//        this.hireDate = hireDate;
+//        this.daysVacation = daysVacation;
+        setFirstName(firstName);
+        setLastName(lastName);
+        setSsn(ssn);
+        setHireDate(hireDate);
+        setDaysVacation(daysVacation);
     }
     
     public int getDaysVacation() {
@@ -47,6 +69,12 @@ public class Employee {
     }
 
     public void setDaysVacation(int daysVacation) {
+        if (this.isIntNegative(daysVacation) == true) {
+            throw new IllegalArgumentException(VACATION_DAYS_ARE_NEGATIVE_ERROR);       
+        }
+        if (this.isVacationOverMaximum(daysVacation)) {
+            throw new IllegalArgumentException(VACATION_DAYS_OVER_MAXIMUM_ERROR);
+        }
         this.daysVacation = daysVacation;
     }
 
@@ -55,6 +83,9 @@ public class Employee {
     }
 
     public void setFirstName(String firstName) {
+        if (isStringNullOrBlank(ssn) == true) {
+            throw new IllegalArgumentException(SSN_NULL_OR_BLANK_ERROR);
+        }
         this.firstName = firstName;
     }
 
@@ -64,7 +95,10 @@ public class Employee {
 
     public void setHireDate(Date hireDate) {
         if(hireDate == null) {
-            throw new IllegalArgumentException("hireDate cannot be null");
+            throw new IllegalArgumentException(HIREDATE_NULL_OR_BLANK_ERROR);
+        }
+        if (isDateInFuture(hireDate)) {
+            throw new IllegalArgumentException(HIREDATE_IN_FUTURE_ERROR);
         }
         this.hireDate = hireDate;
     }
@@ -74,6 +108,9 @@ public class Employee {
     }
 
     public void setLastName(String lastName) {
+        if (isStringNullOrBlank(ssn) == true) {
+            throw new IllegalArgumentException(LAST_NAME_NULL_OR_BLANK_ERROR);
+        }
         this.lastName = lastName;
     }
 
@@ -82,25 +119,52 @@ public class Employee {
     }
 
     public void setSsn(String ssn) {
-        validateSsn(ssn);
+        if (isStringNullOrBlank(ssn) == true) {
+            throw new IllegalArgumentException(SSN_NULL_OR_BLANK_ERROR);
+        }
+        if (isSsnFormatValid(ssn) == false) {
+            throw new IllegalArgumentException(SSN_FORMAT_ERROR);
+        }
         this.ssn = ssn;
     }
     
-    private void validateStringInput(String theString, String stringName) 
-            throws IllegalArgumentException{
+    private boolean isStringNullOrBlank(String theString) {
+        boolean result = false;
         if (theString == null || theString.length() == 0) {
-            throw new IllegalArgumentException(stringName + " must not be null or " +
-                    "blank.");
+            result = true;
         }
+        return result;
     }
     
-    private void validateSsn(String ssn) throws IllegalArgumentException {
-        validateStringInput(ssn, "ssn");
+    private boolean isSsnFormatValid(String ssn) {
+        boolean result = false;
         if (ssn.matches("[0-9]{3}\\-[0-9]{2}\\-[0-9]{4}")) {
             //ssn is correct format
+            result = true;
         }
-        else {
-            throw new IllegalArgumentException("ssn format does not match template.");
+        return result;
+    }
+    
+    private boolean isDateInFuture(Date d){
+        boolean result = false;
+        Date now = new Date();
+        if(d.compareTo(now) > 0) {
+            result = true;
         }
+        return result;
+    }
+    
+    private boolean isIntNegative(int i) {
+        boolean result = false;
+        if (i < 0) {
+            result = true;
+        }
+        return result;
+    }
+    
+    private boolean isVacationOverMaximum(int d) {
+        boolean result = false;
+        if (d > this.MAX_VACATION_DAYS) result = true;
+        return result;
     }
 }
