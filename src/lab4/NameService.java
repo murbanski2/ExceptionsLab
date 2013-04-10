@@ -19,8 +19,13 @@ public class NameService {
      * @return the last name
      */
     public String extractLastName(String fullName) {
-        String[] nameParts = fullName.split(" ");
-        return nameParts[LAST_NAME_IDX];
+        try {
+            String[] nameParts = fullName.split(" ");
+            return nameParts[LAST_NAME_IDX];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException();
+        }
     }
     
     /**
@@ -31,8 +36,13 @@ public class NameService {
      * @return the first name
      */
     public String extractFirstName(String fullName) {
-        String[] nameParts = fullName.split(" ");
-        return nameParts[FIRST_NAME_IDX];
+        try {
+            String[] nameParts = fullName.split(" ");
+            return nameParts[FIRST_NAME_IDX];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -42,7 +52,12 @@ public class NameService {
      * @return the length of the name or part.
      */
     public int getNameLength(String name) {
-        return name.length();
+        try {
+            return name.length();
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException();
+        }
     }
     
 }
