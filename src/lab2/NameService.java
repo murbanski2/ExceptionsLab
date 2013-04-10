@@ -10,6 +10,10 @@ package lab2;
 public class NameService {
     private static final int FIRST_NAME_IDX = 0;
     private static final int LAST_NAME_IDX = 1;
+    private static final String NAME_NULL_OR_BLANK_ERROR
+            = "Name must not be null or blank.";
+    private static final String NAME_NOT_TWO_PARTS
+            = "Name must have at least two parts separated by a space.";
     
     /**
      * Finds and returns the last name from within a full name. Caution: 
@@ -19,7 +23,13 @@ public class NameService {
      * @return the last name
      */
     public String extractLastName(String fullName) {
+        if (isStringNullOrVoid(fullName) == true) {
+            throw new IllegalArgumentException(NAME_NULL_OR_BLANK_ERROR);
+        }
         String[] nameParts = fullName.split(" ");
+        if (isNameTwoOrMoreParts(nameParts) == false) {
+            throw new IllegalArgumentException(NAME_NOT_TWO_PARTS);
+        }
         return nameParts[LAST_NAME_IDX];
     }
     
@@ -31,7 +41,13 @@ public class NameService {
      * @return the first name
      */
     public String extractFirstName(String fullName) {
+        if (isStringNullOrVoid(fullName) == true) {
+            throw new IllegalArgumentException(NAME_NULL_OR_BLANK_ERROR);
+        }
         String[] nameParts = fullName.split(" ");
+        if (isNameTwoOrMoreParts(nameParts) == false) {
+            throw new IllegalArgumentException(NAME_NOT_TWO_PARTS);
+        }
         return nameParts[FIRST_NAME_IDX];
     }
 
@@ -42,7 +58,26 @@ public class NameService {
      * @return the length of the name or part.
      */
     public int getNameLength(String name) {
+        if (isStringNullOrVoid(name) == true) {
+            throw new IllegalArgumentException(NAME_NULL_OR_BLANK_ERROR);
+        }
         return name.length();
     }
     
+       
+    private static boolean isStringNullOrVoid(String name){
+        boolean result = false;
+        if (name == null || name.length() == 0) {
+           result = true;
+        }
+        return result;
+    }
+    
+    private boolean isNameTwoOrMoreParts(String[] parts) {
+	boolean result = true;
+	if (parts.length < 2) {
+            result = false;
+	}
+	return result;
+    }
 }
