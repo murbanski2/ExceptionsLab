@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
  */
 public class Challenge1 {
     private static final int LAST_NAME_IDX = 1;
+    private static final String NAME_NULL_OR_BLANK_ERROR
+            = "Name must not be null or blank.  Please enter a name.";
 
     public static void main(String[] args) {
         boolean keepGoing = true;
@@ -24,7 +26,9 @@ public class Challenge1 {
                 Challenge1 app = new Challenge1();
 
                 String fullName = JOptionPane.showInputDialog("Enter full name:");
-                validateStringInput(fullName);
+                if (isStringNullOrVoid(fullName)) {
+                    throw new IllegalArgumentException(NAME_NULL_OR_BLANK_ERROR);
+                }
                 String lastName = app.extractLastName(fullName);
                 String msg = "Your last name is: " + lastName;
                 JOptionPane.showMessageDialog(null, msg);
@@ -34,7 +38,7 @@ public class Challenge1 {
                 JOptionPane.showMessageDialog(null, iae.getMessage() );
             }
             finally {
-            
+                //I don't think anything needs to be done here.
             } 
         }
     }
@@ -50,12 +54,12 @@ public class Challenge1 {
         return nameParts[LAST_NAME_IDX];
         }
     
-    private static void validateStringInput(String fName) throws IllegalArgumentException{
-    
+    private static boolean isStringNullOrVoid(String fName){
+        boolean result = false;
         if (fName == null || fName.length() == 0) {
-            throw new IllegalArgumentException("Name must not be null or " +
-                    "blank.  Please enter a name.");
+           result = true;
         }
+        return result;
     }
 }
     
